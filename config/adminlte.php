@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Ziyego',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>ZIYE</b>GÓ',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -376,6 +376,34 @@ return [
                 ],
             ],
         ],
+        ['header' => 'Cliente'],
+        [
+            'text' => 'Clientes',
+            'url' => 'clients',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Nuevo Cliente',
+            'url' => 'clients/create',
+            'icon' => 'fas fa-fw fa-user-plus',
+        ],
+        ['header' => 'Cuenta'],
+        [
+            'text' => 'Cuentas',
+            'url' => 'cuentas',
+            'icon' => 'fas fa-fw fa-money-check',
+        ],
+        [
+            'text' => 'Nueva Cuenta',
+            'url' => 'cuentas/create',
+            'icon' => 'fas fa-fw fa-money-check-alt',
+        ],
+        ['header' => 'Transacciones'],
+        [
+            'text' => 'Transacciones',
+            'url' => 'transacciones',
+            'icon' => 'fas fa-fw fa-exchange-alt',
+        ],
         ['header' => 'labels'],
         [
             'text' => 'important',
@@ -430,7 +458,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -475,12 +503,12 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
             ],
         ],
