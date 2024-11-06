@@ -3,6 +3,10 @@
 return [
 
     'full_name' => 'Nombre completo',
+    'apellidos' => 'Apellidos',
+    'genero' => 'Género',
+    'telefono' => 'Teléfono',
+    'fecnac' => 'Fecha de nacimiento',
     'email' => 'Email',
     'password' => 'Contraseña',
     'retype_password' => 'Confirmar la contraseña',

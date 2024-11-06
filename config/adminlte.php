@@ -376,7 +376,7 @@ return [
                 ],
             ],
         ],
-        ['header' => 'Cliente'],
+        /*['header' => 'Cliente'],
         [
             'text' => 'Clientes',
             'url' => 'clients',
@@ -386,7 +386,7 @@ return [
             'text' => 'Nuevo Cliente',
             'url' => 'clients/create',
             'icon' => 'fas fa-fw fa-user-plus',
-        ],
+        ],*/
         ['header' => 'Cuenta'],
         [
             'text' => 'Cuentas',
