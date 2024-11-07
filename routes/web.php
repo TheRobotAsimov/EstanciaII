@@ -15,4 +15,5 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     Route::resource('/clients', \App\Http\Controllers\ClientController::class)->names('clients');
+    Route::resource('/users', \App\Http\Controllers\UserController::class)->names('users');
 });

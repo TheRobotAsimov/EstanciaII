@@ -98,7 +98,7 @@ class ClientController extends Controller
 
         $cliente->save();
 
-        return view('sistema.listClients', compact('cliente'))->with('mensaje', 'Cliente actualizado correctamente');
+        return view('sistema.editClient', compact('cliente'))->with('mensaje', 'Cliente actualizado correctamente');
 
     }
 

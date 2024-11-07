@@ -376,6 +376,17 @@ return [
                 ],
             ],
         ],
+        ['header' => 'Usuarios'],
+        [
+            'text' => 'Usuarios',
+            'url' => 'users',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Nuevo Usuario',
+            'url' => 'users/create',
+            'icon' => 'fas fa-fw fa-user-plus',
+        ],
         /*['header' => 'Cliente'],
         [
             'text' => 'Clientes',
