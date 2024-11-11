@@ -14,6 +14,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::resource('/clients', \App\Http\Controllers\ClientController::class)->names('clients');
     Route::resource('/users', \App\Http\Controllers\UserController::class)->names('users');
+    Route::resource('/movimientos', \App\Http\Controllers\MovimientoController::class)->names('movimientos');
 });

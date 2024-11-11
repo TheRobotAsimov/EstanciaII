@@ -387,17 +387,12 @@ return [
             'url' => 'users/create',
             'icon' => 'fas fa-fw fa-user-plus',
         ],
-        /*['header' => 'Cliente'],
+        ['header' => 'Movimientos'],
         [
-            'text' => 'Clientes',
-            'url' => 'clients',
+            'text' => 'Movimientos',
+            'url' => 'movimientos',
             'icon' => 'fas fa-fw fa-user',
         ],
-        [
-            'text' => 'Nuevo Cliente',
-            'url' => 'clients/create',
-            'icon' => 'fas fa-fw fa-user-plus',
-        ],*/
         ['header' => 'Cuenta'],
         [
             'text' => 'Cuentas',
