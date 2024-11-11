@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\cSubTipo;
+use App\Models\Empleado;
 use App\Models\Movimiento;
 use Illuminate\Http\Request;
 
@@ -14,8 +16,10 @@ class MovimientoController extends Controller
     {
         //
         $movimientos = Movimiento::all();
+        $subtipos = cSubTipo::all();
+        $empleados = Empleado::all();
 
-        return view('sistema.listMovimientos', compact('movimientos'));
+        return view('sistema.listMovimientos', compact('movimientos', 'subtipos', 'empleados'));
     }
 
     /**
@@ -32,6 +36,14 @@ class MovimientoController extends Controller
     public function store(Request $request)
     {
         //
+        $movimiento = Movimiento::create([
+            'id_empleado' => $request->empleado,
+            'id_c_sub_tipo' => $request->subtipo,
+            'monto' => $request->monto,
+            'notas' => $request->notas,
+        ]);
+
+        return back()->with('success', 'Movimiento registrado correctamente');
     }
 
     /**

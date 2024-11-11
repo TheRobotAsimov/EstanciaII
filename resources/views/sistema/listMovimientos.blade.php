@@ -11,13 +11,12 @@
 
     <div class="card">
         <div class="card-header">
-            <x-adminlte-button label="Agregar" theme="primary" icon="fas fa-plus" class="float-right" data-toggle="modal" data-target="#modalCustom"/>
+            <x-adminlte-button label="Nuevo Movimiento" theme="primary" icon="fas fa-plus" class="float-right" data-toggle="modal" data-target="#modalCustom"/>
         </div>
         <div class="card-body">
             @php
             $heads = [
                 'ID',
-                'Tipo',
                 'Subtipo',
                 ['label' => 'Empleado', 'width' => 30],
                 ['label' => 'Monto', 'width' => 30],
@@ -41,15 +40,14 @@
                 @foreach($movimientos as $movimiento)
                     <tr>
                         <td>{{ $movimiento->id }}</td>
-                        <td>{{ $movimiento->cSubTipo->cTipo->nombre }}</td>
-                        <td>{{ $movimiento->cSubTipo->nombre }}</td>
-                        <td>{{ $movimiento->empleado->usuario->nombre }}</td>
+                        <td>{{ $movimiento->id_c_sub_tipo }}</td>
+                        <td>{{ $movimiento->id_empleado}}</td>
                         <td>{{ $movimiento->monto }}</td>
                         <td>
-                            <a href="{{route('users.edit', $usuario)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
+                            <a href="{{route('users.edit', $movimiento)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
                                 <i class="fa fa-lg fa-fw fa-pen"></i>
                             </a>
-                            <form style="display: inline" action="{{route('users.destroy', $usuario)}}" method="post" class="formEliminar">
+                            <form style="display: inline" action="{{route('users.destroy', $movimiento)}}" method="post" class="formEliminar">
                                 @csrf
                                 @method('delete')
                                 {!! $btnDelete !!}
@@ -64,10 +62,45 @@
 
     <x-adminlte-modal id="modalCustom" title="Agregar Movimiento" size="lg" theme="blue"
     icon="fas fa-plus" v-centered static-backdrop scrollable>
-        <div style="height:800px;">Complete los campos</div>
-        <x-slot name="footerSlot">
-            <x-adminlte-button class="float-right" theme="success" label="Agregar"/>
-        </x-slot>
+        <p>Complete los campos</p>
+        <form action="{{route('movimientos.store')}}" method="post">
+            @csrf
+            <div class="form-group">
+                <label for="tipo">Tipo</label>
+                <select name="tipo" id="tipo" class="form-control">
+                    <option value="">Seleccione un tipo</option>
+                    <option value="1">Ingreso</option>
+                    <option value="2">Egreso</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="subtipo">Subtipo</label>
+                <select name="subtipo" id="subtipo" class="form-control">
+                    <option value="">Seleccione un subtipo</option>
+                    @foreach ($subtipos as $subtipo)
+                        <option value="{{$subtipo->id}}">{{$subtipo->nombre}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="empleado">Empleado</label>
+                <select name="empleado" id="empleado" class="form-control">
+                    <option value="">Seleccione un empleado</option>
+                    @foreach ($empleados as $empleado)
+                        <option value="{{$empleado->id}}">{{$empleado->usuario->nombre}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="monto">Monto</label>
+                <input type="number" name="monto" id="monto" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="fecha">Notas</label>
+                <textarea name="notas" id="notas" class="form-control"></textarea>
+            </div>
+            <x-adminlte-button  type="submit" label="Agregar" theme="primary" icon="fas fa-plus" class="float-right"/>
+        </form>
     </x-adminlte-modal>
 @stop
 
@@ -102,4 +135,6 @@
             });
         })
     </script>
+
+    
 @stop
