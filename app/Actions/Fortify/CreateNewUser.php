@@ -30,7 +30,7 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'nombre' => $input['nombre'],
             'apellidos' => $input['apellidos'],
             'genero' => $input['genero'],
@@ -39,5 +39,13 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
+
+        // Crear cliente
+        $user->cliente()->create([
+            'saldo' => 0,
+            'estado' => 'Activo',
+        ]);
+
+        return $user;
     }
 }

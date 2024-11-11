@@ -41,13 +41,14 @@ class UserController extends Controller
             'genero' => ['required', 'string', 'max:50'],
             'telefono' => ['required', 'numeric', 'digits:10'],
             'fecnac' => ['required', 'date', 'before:'.now()->subYears(18)->toDateString()],
+            'puesto' => ['required', 'string', 'max:45'],
             'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],  // Cambia según tus reglas de password
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ]);
 
         // Crear el usuario
-        User::create([
+        $user = User::create([
             'nombre' => $validatedData['nombre'],
             'apellidos' => $validatedData['apellidos'],
             'genero' => $validatedData['genero'],
@@ -55,6 +56,11 @@ class UserController extends Controller
             'fecnac' => $validatedData['fecnac'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
+        ]);
+
+        // Crear el empleado
+        $user->empleado()->create([
+            'puesto' => $validatedData['puesto'],
         ]);
 
         // Redireccionar o responder

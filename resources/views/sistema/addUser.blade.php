@@ -101,6 +101,25 @@
                         </span>
                     @enderror
                 </div>
+
+                {{-- Puesto field --}}
+                <div class="input-group mb-3">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-briefcase {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                        </div>
+                    </div>
+                    <select name="puesto" class="form-control @error('puesto') is-invalid @enderror">
+                        <option value="">Seleccione puesto</option>
+                        <option value="Analisis" {{ old('puesto') == 'Analisis' ? 'selected' : '' }}>Analisis</option>
+                        <option value="Desarrollo" {{ old('puesto') == 'Desarrollo' ? 'selected' : '' }}>Desarrollo</option>
+                    </select>
+                    @error('puesto')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
         
                 {{-- Email field --}}
                 <div class="mb-3 input-group">
