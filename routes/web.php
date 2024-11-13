@@ -6,6 +6,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/subtipos/{tipoId}', [\App\Http\Controllers\MovimientoController::class, 'getSubtipos']);
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -16,4 +19,6 @@ Route::middleware([
     })->name('dashboard');
     Route::resource('/users', \App\Http\Controllers\UserController::class)->names('users');
     Route::resource('/movimientos', \App\Http\Controllers\MovimientoController::class)->names('movimientos');
+    Route::resource('/incidencias', \App\Http\Controllers\IncidenciaController::class)->names('incidencias');
+    Route::resource('/expedientes', \App\Http\Controllers\ExpedienteController::class)->names('expedientes');
 });

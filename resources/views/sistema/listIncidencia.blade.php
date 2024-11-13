@@ -3,24 +3,26 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>LISTA DE MOVIENTOS</h1>
+    <h1>LISTA DE INCIDENCIAS</h1>
 @stop
 
 @section('content')
-    <p>Aquí se muestra el listado de los movimientos</p>
+    <p>Aquí se muestra el listado de los incidencias</p>
 
     <div class="card">
         <div class="card-header">
-            <x-adminlte-button label="Nuevo Movimiento" theme="primary" icon="fas fa-plus" class="float-right" data-toggle="modal" data-target="#modalCustom"/>
+            <x-adminlte-button label="Nuevo incidencia" theme="primary" icon="fas fa-plus" class="float-right" data-toggle="modal" data-target="#modalCustom"/>
         </div>
         <div class="card-body">
             @php
             $heads = [
                 'ID',
+                'Guia',
                 'Tipo',
-                'Subtipo',
-                ['label' => 'Empleado', 'width' => 30],
-                ['label' => 'Monto', 'width' => 30],
+                'Monto',
+                'Estado',
+                'Fecha Incidencia',
+                'Fecha Pago',
                 ['label' => 'Acciones', 'no-export' => true, 'width' => 20],
             ];
 
@@ -38,18 +40,20 @@
 
             {{-- Minimal example / fill data using the component slot --}}
             <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
-                @foreach($movimientos as $movimiento)
+                @foreach($incidencias as $incidencia)
                     <tr>
-                        <td>{{ $movimiento->id }}</td>
-                        <td>{{ $movimiento->subtipo->tipo->nombre }}</td>
-                        <td>{{ $movimiento->subtipo->nombre }}</td>
-                        <td>{{ $movimiento->empleado->usuario->nombre}}</td>
-                        <td>{{ $movimiento->monto }}</td>
+                        <td>{{ $incidencia->id }}</td>
+                        <td>{{ $incidencia->guia }}</td>
+                        <td>{{ $incidencia->tipo }}</td>
+                        <td>{{ $incidencia->monto }}</td>
+                        <td>{{ $incidencia->estado == 1 ? 'Pagado' : 'Pendiente' }}</td>
+                        <td>{{ $incidencia->fechaIncidencia }}</td>
+                        <td>{{ $incidencia->fechaPago }}</td>
                         <td>
-                            <a href="{{route('movimientos.edit', $movimiento)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
+                            <a href="{{route('incidencias.edit', $incidencia)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
                                 <i class="fa fa-lg fa-fw fa-pen"></i>
                             </a>
-                            <form style="display: inline" action="{{route('movimientos.destroy', $movimiento)}}" method="post" class="formEliminar">
+                            <form style="display: inline" action="{{route('incidencias.destroy', $incidencia)}}" method="post" class="formEliminar">
                                 @csrf
                                 @method('delete')
                                 {!! $btnDelete !!}
@@ -62,32 +66,48 @@
         </div>
     </div>
 
-    <x-adminlte-modal id="modalCustom" title="Agregar Movimiento" size="lg" theme="blue"
+    <x-adminlte-modal id="modalCustom" title="Agregar incidencia" size="lg" theme="blue"
     icon="fas fa-plus" v-centered static-backdrop scrollable>
         <p>Complete los campos</p>
-        <form action="{{route('movimientos.store')}}" method="post">
+        <form action="{{route('incidencias.store')}}" method="post">
             @csrf
             <div class="form-group">
-                <label for="subtipo">Subtipo</label>
-                <select name="subtipo" id="subtipo" class="form-control">
-                    <option value="">Seleccione un subtipo</option>
-                    @foreach ($subtipos as $subtipo)
-                        <option value="{{$subtipo->id}}">{{$subtipo->nombre}}</option>
+                <label for="guia">Guia</label>
+                <select name="guia" id="guia" class="form-control">
+                    <option value="">Seleccione una guia</option>
+                    @foreach ($envios as $envio)
+                        <option value="{{$envio->guia}}">{{$envio->guia}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="form-group">
-                <label for="empleado">Empleado</label>
-                <select name="empleado" id="empleado" class="form-control">
+                <label for="tipo">Tipo</label>
+                <select name="tipo" id="tipo" class="form-control">
                     <option value="">Seleccione un empleado</option>
-                    @foreach ($empleados as $empleado)
-                        <option value="{{$empleado->id}}">{{$empleado->usuario->nombre}}</option>
-                    @endforeach
+                    <option value="Retraso">Retraso</option>
+                    <option value="Perdida">Perdida</option>
+                    <option value="Danio">Danio</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="monto">Monto</label>
                 <input type="number" name="monto" id="monto" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="estado">Estado</label>
+                <select name="estado" id="estado" class="form-control">
+                    <option value="">Seleccione un estado</option>
+                    <option value="1">Pagado</option>
+                    <option value="2">Pendiente</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fechaIncidencia">Fecha Incidencia</label>
+                <input type="date" name="fechaIncidencia" id="fechaIncidencia" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="fechaPago">Fecha Pago</label>
+                <input type="date" name="fechaPago" id="fechaPago" class="form-control">
             </div>
             <div class="form-group">
                 <label for="fecha">Notas</label>

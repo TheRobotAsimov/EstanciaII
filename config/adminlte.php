@@ -393,6 +393,18 @@ return [
             'url' => 'movimientos',
             'icon' => 'fas fa-fw fa-user',
         ],
+        ['header' => 'Incidencias'],
+        [
+            'text' => 'Incidencias',
+            'url' => 'incidencias',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        ['header' => 'Expediente'],
+        [
+            'text' => 'Expediente',
+            'url' => 'expedientes',
+            'icon' => 'fas fa-fw fa-user',
+        ],
         ['header' => 'Cuenta'],
         [
             'text' => 'Cuentas',

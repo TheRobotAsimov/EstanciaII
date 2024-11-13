@@ -23,4 +23,9 @@ class Cliente extends Model
     {
         return $this->belongsTo(User::class, 'id');
     }
+
+    public function expedientes()
+    {
+        return $this->hasMany(Expediente::class, 'id_cliente');
+    }
 }

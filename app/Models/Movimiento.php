@@ -14,13 +14,14 @@ class Movimiento extends Model
         'notas',
     ];
 
-    public function cSubTipo()
-    {
-        return $this->belongsTo(cSubTipo::class, 'id');
-    }
-
     public function empleado()
     {
-        return $this->belongsTo(Empleado::class, 'id');
+        return $this->belongsTo(Empleado::class, 'id_empleado');
     }
+
+    public function subtipo()
+    {
+        return $this->belongsTo(cSubTipo::class, 'id_c_sub_tipo');
+    }
+
 }

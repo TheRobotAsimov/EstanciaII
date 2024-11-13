@@ -21,4 +21,9 @@ class Empleado extends Model
     {
         return $this->belongsTo(User::class, 'id');
     }
+
+    public function movimientos()
+    {
+        return $this->hasMany(Movimiento::class, 'id_empleado');
+    }
 }

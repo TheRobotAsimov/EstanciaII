@@ -3,24 +3,23 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>LISTA DE MOVIENTOS</h1>
+    <h1>LISTA DE EXPEDIENTES</h1>
 @stop
 
 @section('content')
-    <p>Aquí se muestra el listado de los movimientos</p>
+    <p>Aquí se muestra el listado de los expedientes</p>
 
     <div class="card">
         <div class="card-header">
-            <x-adminlte-button label="Nuevo Movimiento" theme="primary" icon="fas fa-plus" class="float-right" data-toggle="modal" data-target="#modalCustom"/>
+            <x-adminlte-button label="Nuevo expediente" theme="primary" icon="fas fa-plus" class="float-right" data-toggle="modal" data-target="#modalCustom"/>
         </div>
         <div class="card-body">
             @php
             $heads = [
                 'ID',
-                'Tipo',
-                'Subtipo',
-                ['label' => 'Empleado', 'width' => 30],
-                ['label' => 'Monto', 'width' => 30],
+                'Cliente',
+                'Categoria',
+                'Valor',
                 ['label' => 'Acciones', 'no-export' => true, 'width' => 20],
             ];
 
@@ -38,18 +37,17 @@
 
             {{-- Minimal example / fill data using the component slot --}}
             <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
-                @foreach($movimientos as $movimiento)
+                @foreach($expedientes as $expediente)
                     <tr>
-                        <td>{{ $movimiento->id }}</td>
-                        <td>{{ $movimiento->subtipo->tipo->nombre }}</td>
-                        <td>{{ $movimiento->subtipo->nombre }}</td>
-                        <td>{{ $movimiento->empleado->usuario->nombre}}</td>
-                        <td>{{ $movimiento->monto }}</td>
+                        <td>{{ $expediente->id }}</td>
+                        <td>{{ $expediente->cliente->usuario->nombre }}</td>
+                        <td>{{ $expediente->categoria->nombre }}</td>
+                        <td>{{ $expediente->valor }}</td>
                         <td>
-                            <a href="{{route('movimientos.edit', $movimiento)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
+                            <a href="{{route('expedientes.edit', $expediente)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
                                 <i class="fa fa-lg fa-fw fa-pen"></i>
                             </a>
-                            <form style="display: inline" action="{{route('movimientos.destroy', $movimiento)}}" method="post" class="formEliminar">
+                            <form style="display: inline" action="{{route('expedientes.destroy', $expediente)}}" method="post" class="formEliminar">
                                 @csrf
                                 @method('delete')
                                 {!! $btnDelete !!}
@@ -62,36 +60,36 @@
         </div>
     </div>
 
-    <x-adminlte-modal id="modalCustom" title="Agregar Movimiento" size="lg" theme="blue"
+    <x-adminlte-modal id="modalCustom" title="Agregar expediente" size="lg" theme="blue"
     icon="fas fa-plus" v-centered static-backdrop scrollable>
         <p>Complete los campos</p>
-        <form action="{{route('movimientos.store')}}" method="post">
+        <form action="{{route('expedientes.store')}}" method="post">
             @csrf
             <div class="form-group">
-                <label for="subtipo">Subtipo</label>
-                <select name="subtipo" id="subtipo" class="form-control">
-                    <option value="">Seleccione un subtipo</option>
-                    @foreach ($subtipos as $subtipo)
-                        <option value="{{$subtipo->id}}">{{$subtipo->nombre}}</option>
+                <label for="cliente">Cliente</label>
+                <select name="cliente" id="cliente" class="form-control">
+                    <option value="">Seleccione un cliente</option>
+                    @foreach ($clientes as $cliente)
+                        <option value="{{$cliente->id}}">{{$cliente->usuario->nombre}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="form-group">
-                <label for="empleado">Empleado</label>
-                <select name="empleado" id="empleado" class="form-control">
-                    <option value="">Seleccione un empleado</option>
-                    @foreach ($empleados as $empleado)
-                        <option value="{{$empleado->id}}">{{$empleado->usuario->nombre}}</option>
+                <label for="categoria">Categoria</label>
+                <select name="categoria" id="categoria" class="form-control">
+                    <option value="">Seleccione una categoria</option>
+                    @foreach ($categorias as $categoria)
+                        <option value="{{$categoria->id}}">{{$categoria->nombre}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="form-group">
-                <label for="monto">Monto</label>
-                <input type="number" name="monto" id="monto" class="form-control">
+                <label for="valor">Valor</label>
+                <input type="text" name="valor" class="form-control" placeholder="Ingrese el valor">
             </div>
             <div class="form-group">
-                <label for="fecha">Notas</label>
-                <textarea name="notas" id="notas" class="form-control"></textarea>
+                <label for="notas">Notas</label>
+                <textarea name="notas" id="notas" class="form-control" placeholder="Ingrese notas"></textarea>
             </div>
             <x-adminlte-button  type="submit" label="Agregar" theme="primary" icon="fas fa-plus" class="float-right"/>
         </form>
