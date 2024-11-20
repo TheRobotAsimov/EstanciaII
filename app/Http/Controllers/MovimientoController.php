@@ -6,6 +6,7 @@ use App\Models\cSubTipo;
 use App\Models\cTipo;
 use App\Models\Empleado;
 use App\Models\Movimiento;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class MovimientoController extends Controller
@@ -31,16 +32,6 @@ class MovimientoController extends Controller
     {
         //
     }
-
-    public function getSubtipos($tipoId)
-    {
-        // Obtén los subtipos que corresponden al tipo seleccionado
-        $subtipos = cSubtipo::where('id_tipo', $tipoId)->get(['id', 'nombre']);
-        
-        // Devuelve los subtipos como JSON
-        return response()->json($subtipos);
-    }
-
 
     /**
      * Store a newly created resource in storage.
@@ -113,5 +104,14 @@ class MovimientoController extends Controller
         $movimiento->delete();
 
         return back()->with('success', 'Movimiento eliminado correctamente');
+    }
+
+    public function reporte()
+    {
+        $movimientos = Movimiento::all();
+
+        $pdf = Pdf::loadView('sistema.reporteMovimientos', compact('movimientos'));
+
+        return $pdf->stream('reporte_movimientos.pdf');
     }
 }

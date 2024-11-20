@@ -1,6 +1,7 @@
 @extends('adminlte::page')
 
 @section('title', 'Dashboard')
+@section('plugins.DateRangePicker', true)
 
 @section('content_header')
     <h1>LISTA DE INCIDENCIAS</h1>
@@ -11,7 +12,21 @@
 
     <div class="card">
         <div class="card-header">
-            <x-adminlte-button label="Nuevo incidencia" theme="primary" icon="fas fa-plus" class="float-right" data-toggle="modal" data-target="#modalCustom"/>
+            <x-adminlte-button label="Nuevo incidencia" theme="primary" icon="fas fa-plus" class="float-right m-3" data-toggle="modal" data-target="#modalCustom"/>
+            <div class="m-3">
+                <x-adminlte-date-range name="drCustomRanges" enable-default-ranges="Last 30 Days" id="daterange" value="{{ request('start') ? request('start').' - '.request('end') : '' }}">
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-gradient-info">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-date-range>
+            </div>
+            <div>
+                <x-adminlte-button id="btnApplyFilter" label="Aplicar Filtro" theme="primary" icon="fas fa-filter" class="ml-3"/>
+                <x-adminlte-button id="btnClearFilter" label="Limpiar Filtro" theme="danger" icon="fas fa-times" class="ml-3"/>
+            </div>
+            <x-adminlte-button id="btnGeneratePdf" label="Generar Reporte PDF" theme="warning" icon="fas fa-file-pdf" class="text-white m-3"/>
         </div>
         <div class="card-body">
             @php
@@ -148,7 +163,60 @@
                 });
             });
         })
-    </script>
+        
+        $(function () {
+            $('#daterange').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY',
+                    separator: ' - ',
+                    applyLabel: 'Aplicar',
+                    cancelLabel: 'Cancelar',
+                    fromLabel: 'Desde',
+                    toLabel: 'Hasta',
+                    customRangeLabel: 'Rango personalizado',
+                    weekLabel: 'S',
+                    daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                    monthNames: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                    ],
+                    firstDay: 1
+                },
+                ranges: {
+                    'Hoy': [moment(), moment()],
+                    'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
+                    'Últimos 30 Días': [moment().subtract(29, 'days'), moment()],
+                    'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                    'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                }
+            }).on('apply.daterangepicker', function (ev, picker) {
+                selectedStart = picker.startDate.format('YYYY-MM-DD');
+                selectedEnd = picker.endDate.format('YYYY-MM-DD');
+            });
 
-    
+            $('#btnApplyFilter').on('click', function () {
+                if (selectedStart && selectedEnd) {
+                    window.location.href = `?start=${selectedStart}&end=${selectedEnd}`;
+                } else {
+                    alert('Por favor selecciona un rango de fechas antes de aplicar el filtro.');
+                }
+            });
+        });
+
+        $('#btnClearFilter').on('click', function () {
+            window.location.href = window.location.pathname; // Recarga la página sin parámetros.
+        });
+
+        $('#btnGeneratePdf').on('click', function () {
+            let params = new URLSearchParams(window.location.search);
+            let url = '{{ route('incidencias.reporte') }}';
+
+            if (params.toString()) {
+                url += '?' + params.toString(); // Mantener los parámetros de rango de fechas si existen
+            }
+
+            window.location.href = url;
+        });
+    </script>
 @stop

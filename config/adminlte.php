@@ -320,13 +320,6 @@ return [
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
-        [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
@@ -339,42 +332,9 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text' => 'multilevel',
-            'icon' => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-            ],
+            'text' => 'Verificar',
+            'url' => 'clientes/verificar',
+            'icon' => 'fas fa-fw fa-check',
         ],
         ['header' => 'Usuarios'],
         [
@@ -387,56 +347,45 @@ return [
             'url' => 'users/create',
             'icon' => 'fas fa-fw fa-user-plus',
         ],
-        ['header' => 'Movimientos'],
+        ['header' => 'Empleados'],
         [
             'text' => 'Movimientos',
             'url' => 'movimientos',
             'icon' => 'fas fa-fw fa-user',
         ],
-        ['header' => 'Incidencias'],
+        ['header' => 'Clientes'],
         [
             'text' => 'Incidencias',
             'url' => 'incidencias',
             'icon' => 'fas fa-fw fa-user',
         ],
-        ['header' => 'Expediente'],
         [
             'text' => 'Expediente',
             'url' => 'expedientes',
             'icon' => 'fas fa-fw fa-user',
         ],
-        ['header' => 'Cuenta'],
+        ['header' => 'Reportes'],
         [
-            'text' => 'Cuentas',
-            'url' => 'cuentas',
-            'icon' => 'fas fa-fw fa-money-check',
+            'text' => 'Incidencias',
+            'url' => 'incidencias/reporte',
+            'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Nueva Cuenta',
-            'url' => 'cuentas/create',
-            'icon' => 'fas fa-fw fa-money-check-alt',
-        ],
-        ['header' => 'Transacciones'],
-        [
-            'text' => 'Transacciones',
-            'url' => 'transacciones',
-            'icon' => 'fas fa-fw fa-exchange-alt',
-        ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
+            'text' => 'Movimientos',
+            'url' => 'movimientos/reporte',
+            'icon' => 'fas fa-fw fa-user',
+            'target' => '_blank',
         ],
         [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
+            'text' => 'Fraudes',
+            'url' => 'clientes/fraude',
+            'icon' => 'fas fa-fw fa-user',
         ],
+        ['header' => 'Base de Datos'],
         [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
+            'text' => 'Respaldar o Restaurar',
+            'url' => 'bd',
+            'icon' => 'fas fa-fw fa-user',
         ],
     ],
 
@@ -542,6 +491,31 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'DateRangePicker' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/moment/moment.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/moment/locale/es.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/daterangepicker/daterangepicker.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/daterangepicker/daterangepicker.css',
                 ],
             ],
         ],

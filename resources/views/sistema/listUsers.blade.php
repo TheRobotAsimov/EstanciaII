@@ -15,7 +15,8 @@
             $heads = [
                 'ID',
                 'Nombre',
-                ['label' => 'Teléfono', 'width' => 30],
+                'Telefono',
+                'Tipo',
                 ['label' => 'Acciones', 'no-export' => true, 'width' => 20],
             ];
 
@@ -38,6 +39,15 @@
                         <td>{{ $usuario->id }}</td>
                         <td>{{ $usuario->nombre }}</td>
                         <td>{{ $usuario->telefono }}</td>
+                        <td>
+                            @if ($usuario->empleado)
+                                Empleado
+                            @elseif ($usuario->cliente)
+                                Cliente
+                            @else
+                                ---
+                            @endif
+                        </td>
                         <td>
                             <a href="{{route('users.edit', $usuario)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
                                 <i class="fa fa-lg fa-fw fa-pen"></i>
