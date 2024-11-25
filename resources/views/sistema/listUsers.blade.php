@@ -15,6 +15,7 @@
             $heads = [
                 'ID',
                 'Nombre',
+                'Apellidos',
                 'Telefono',
                 'Tipo',
                 ['label' => 'Acciones', 'no-export' => true, 'width' => 20],
@@ -38,6 +39,7 @@
                     <tr>
                         <td>{{ $usuario->id }}</td>
                         <td>{{ $usuario->nombre }}</td>
+                        <td>{{ $usuario->apellidos }}</td>
                         <td>{{ $usuario->telefono }}</td>
                         <td>
                             @if ($usuario->empleado)

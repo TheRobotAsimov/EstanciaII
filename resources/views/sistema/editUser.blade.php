@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>EDICIÓN DE CLIENTE</h1>
+    <h1>EDICIÓN DE USUARIO</h1>
 @stop
 
 @section('content')
@@ -54,7 +54,7 @@
                 </div>
         
                 {{-- Genero field --}}
-                <div class="input-group mb-3">
+                <div class="mb-3 input-group">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-venus-mars {{ config('adminlte.classes_auth_icon', '') }}"></span>
@@ -91,7 +91,7 @@
                 </div>
         
                 {{-- Fecha de Nacimiento field --}}
-                <div class="input-group mb-3">
+                <div class="mb-3 input-group">
                     <input type="date" name="fecnac" class="form-control @error('fecnac') is-invalid @enderror"
                            value="{{ $usuario->fecnac }}" placeholder="Fecha de Nacimiento">
                     

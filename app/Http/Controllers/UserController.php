@@ -64,7 +64,7 @@ class UserController extends Controller
         ]);
 
         // Redireccionar o responder
-        return back()->with('mensaje', 'Usuario agregado correctamente');
+        return redirect()->route('users.index')->with('mensaje', 'Usuario actualizado correctamente');
     }
 
     /**

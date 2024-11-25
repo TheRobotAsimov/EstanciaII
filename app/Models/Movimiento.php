@@ -11,6 +11,7 @@ class Movimiento extends Model
         'id_empleado',
         'id_c_sub_tipo',
         'monto',
+        'fecha',
         'notas',
     ];
 

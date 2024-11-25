@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_empleado')->constrained('empleados')->onDelete('cascade');
             $table->foreignId('id_c_sub_tipo')->constrained('c_sub_tipos')->onDelete('cascade');
             $table->decimal('monto', 10, 4);
+            $table->date('fecha');
             $table->text('notas')->nullable();
             $table->timestamps();
         });

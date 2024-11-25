@@ -43,6 +43,7 @@ class MovimientoController extends Controller
             'id_empleado' => $request->empleado,
             'id_c_sub_tipo' => $request->subtipo,
             'monto' => $request->monto,
+            'fecha' => $request->fecha,
             'notas' => $request->notas,
         ]);
 
@@ -83,6 +84,7 @@ class MovimientoController extends Controller
             'id_empleado' => $request->id_empleado,
             'id_c_sub_tipo' => $request->id_subtipo,
             'monto' => $request->monto,
+            'fecha' => $request->fecha,
             'notas' => $request->notas,
         ]);
 

@@ -25,7 +25,7 @@
                     <select name="id_empleado" class="form-control @error('id_empleado') is-invalid @enderror">
                         <option value="">Seleccione empleado</option>
                         @foreach ($empleados as $empleado)
-                            <option value="{{ $empleado->id }}" {{ $movimiento->id_empleado == $empleado->id ? 'selected' : '' }}>{{ $empleado->usuario->nombre }}</option>
+                            <option value="{{ $empleado->id }}" {{ $movimiento->id_empleado == $empleado->id ? 'selected' : '' }}>{{$empleado->id}} - {{ $empleado->usuario->nombre }}</option>
                         @endforeach
                     </select>
                     @error('id_empleado')
@@ -66,6 +66,22 @@
                     <input type="number" name="monto" class="form-control @error('monto') is-invalid @enderror"
                            value="{{ $movimiento->monto }}" placeholder="Monto">
                     @error('monto')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                {{-- Fecha field --}}
+                <div class="mb-3 input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <span class="fas fa-calendar-alt {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                        </div>
+                    </div>
+                    <input type="date" name="fecha" class="form-control @error('fecha') is-invalid @enderror"
+                           value="{{ $movimiento->fecha }}" placeholder="Fecha">
+                    @error('fecha')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

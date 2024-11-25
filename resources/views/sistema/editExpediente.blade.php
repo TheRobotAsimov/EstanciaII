@@ -26,7 +26,7 @@
                         <option value="">Seleccione cliente</option>
                         @foreach ($clientes as $cliente)
                             <option value="{{ $cliente->id }}" {{ $expediente->id_cliente == $cliente->id ? 'selected' : '' }}>
-                                {{ $cliente->usuario->nombre }}
+                                {{$cliente->id}} - {{ $cliente->usuario->nombre }}
                             </option>
                         @endforeach
                     </select>

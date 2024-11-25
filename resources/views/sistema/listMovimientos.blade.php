@@ -30,8 +30,9 @@
                 'ID',
                 'Tipo',
                 'Subtipo',
-                ['label' => 'Empleado', 'width' => 30],
-                ['label' => 'Monto', 'width' => 30],
+                'Empleado',
+                'Monto',
+                'Fecha',
                 ['label' => 'Acciones', 'no-export' => true, 'width' => 20],
             ];
 
@@ -56,6 +57,7 @@
                         <td>{{ $movimiento->subtipo->nombre }}</td>
                         <td>{{ $movimiento->empleado->usuario->nombre}}</td>
                         <td>{{ $movimiento->monto }}</td>
+                        <td>{{ $movimiento->fecha }}</td>
                         <td>
                             <a href="{{route('movimientos.edit', $movimiento)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
                                 <i class="fa fa-lg fa-fw fa-pen"></i>
@@ -92,13 +94,17 @@
                 <select name="empleado" id="empleado" class="form-control">
                     <option value="">Seleccione un empleado</option>
                     @foreach ($empleados as $empleado)
-                        <option value="{{$empleado->id}}">{{$empleado->usuario->nombre}}</option>
+                        <option value="{{$empleado->id}}">{{$empleado->id}} - {{$empleado->usuario->nombre}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="form-group">
                 <label for="monto">Monto</label>
                 <input type="number" name="monto" id="monto" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="date" name="fecha" id="fecha" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
             </div>
             <div class="form-group">
                 <label for="fecha">Notas</label>
