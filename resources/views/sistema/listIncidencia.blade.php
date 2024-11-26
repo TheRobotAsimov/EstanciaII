@@ -26,13 +26,14 @@
                 <x-adminlte-button id="btnApplyFilter" label="Aplicar Filtro" theme="primary" icon="fas fa-filter" class="ml-3"/>
                 <x-adminlte-button id="btnClearFilter" label="Limpiar Filtro" theme="danger" icon="fas fa-times" class="ml-3"/>
             </div>
-            <x-adminlte-button id="btnGeneratePdf" label="Generar Reporte PDF" theme="warning" icon="fas fa-file-pdf" class="text-white m-3"/>
+            <x-adminlte-button id="btnGeneratePdf" label="Generar Reporte PDF" theme="warning" icon="fas fa-file-pdf" class="m-3 text-white"/>
         </div>
         <div class="card-body">
             @php
             $heads = [
                 'ID',
                 'Guia',
+                'Cliente',
                 'Tipo',
                 'Monto',
                 'Estado',
@@ -58,7 +59,8 @@
                 @foreach($incidencias as $incidencia)
                     <tr>
                         <td>{{ $incidencia->id }}</td>
-                        <td>{{ $incidencia->guia }}</td>
+                        <td>{{ $incidencia->envio->guia }}</td>
+                        <td>{{ $incidencia->envio->cliente->usuario->nombre }}</td>
                         <td>{{ $incidencia->tipo }}</td>
                         <td>{{ $incidencia->monto }}</td>
                         <td>{{ $incidencia->estado == 1 ? 'Pagado' : 'Pendiente' }}</td>
@@ -73,7 +75,9 @@
                                 @method('delete')
                                 {!! $btnDelete !!}
                             </form>
-                            {!! $btnDetails !!}
+                            <button type="button" class="mx-1 shadow btn btn-xs btn-default text-teal btnDetails" data-toggle="modal" data-target="#notasModal" data-notas="{{ $incidencia->notas }}">
+                                <i class="fa fa-lg fa-fw fa-eye"></i>
+                            </button>
                         </td>
                     </tr>
                 @endforeach
@@ -131,6 +135,23 @@
             <x-adminlte-button  type="submit" label="Agregar" theme="primary" icon="fas fa-plus" class="float-right"/>
         </form>
     </x-adminlte-modal>
+
+    <!-- Modal Details -->
+    <div class="modal fade" id="notasModal" tabindex="-1" role="dialog" aria-labelledby="notasModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notasModalLabel">Notas del Movimiento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalNotas"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -184,11 +205,11 @@
                 },
                 ranges: {
                     'Hoy': [moment(), moment()],
-                    'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
-                    'Últimos 30 Días': [moment().subtract(29, 'days'), moment()],
                     'Este Mes': [moment().startOf('month'), moment().endOf('month')],
-                    'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    'Ultimos 3 Meses': [moment().subtract(3, 'month').startOf('month'), moment().endOf('month')],
+                    'Ultimos 6 Meses': [moment().subtract(6, 'month').startOf('month'), moment().endOf('month')],
+                    'Este Año': [moment().startOf('year'), moment().endOf('year')],
                 }
             }).on('apply.daterangepicker', function (ev, picker) {
                 selectedStart = picker.startDate.format('YYYY-MM-DD');
@@ -216,7 +237,14 @@
                 url += '?' + params.toString(); // Mantener los parámetros de rango de fechas si existen
             }
 
-            window.location.href = url;
+            window.open(url, '_blank');
+        });
+
+        $(document).ready(function() {
+            $('.btnDetails').on('click', function() {
+                var notas = $(this).data('notas');
+                $('#modalNotas').text(notas);
+            });
         });
     </script>
 @stop

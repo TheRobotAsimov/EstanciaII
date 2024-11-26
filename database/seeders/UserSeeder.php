@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Empleado;
-
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {

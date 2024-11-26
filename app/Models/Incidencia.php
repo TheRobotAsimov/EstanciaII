@@ -16,4 +16,9 @@ class Incidencia extends Model
         'fechaPago',
         'notas',
     ];
+
+    public function envio()
+    {
+        return $this->belongsTo(Envio::class, 'guia');
+    }
 }

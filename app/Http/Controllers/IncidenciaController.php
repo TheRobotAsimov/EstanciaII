@@ -124,11 +124,13 @@ class IncidenciaController extends Controller
 
         $incidencias = $query->get();
 
+        \Carbon\Carbon::setLocale('es');
+
         // Generar los datos para la gráfica
         $data = $incidencias->groupBy(function ($item) {
-            return \Carbon\Carbon::parse($item->fechaIncidencia)->format('F'); // Agrupar por mes
+            return \Carbon\Carbon::parse($item->fechaIncidencia)->translatedFormat('F'); // Mes traducido
         })->map(function ($group) {
-            return $group->sum('monto'); // Sumar los montos por mes
+            return $group->sum('monto');
         });
 
         $chartData = [
@@ -136,11 +138,45 @@ class IncidenciaController extends Controller
             'values' => $data->values()->toArray(),
         ];
 
+        $values = collect($chartData['values']);
+        $labels = collect($chartData['labels']);
+
+        // Verificar que ambos arrays tengan el mismo tamaño
+        if ($values->count() !== $labels->count()) {
+            throw new \Exception('El número de valores y etiquetas no coincide.');
+        }
+
+        // Calcular el total de los valores
+        $total = $values->sum();
+
+        // Encontrar el índice del valor máximo
+        $maxPercentageKey = $values->search($values->max());
+
+        // Verificar que el índice exista en las etiquetas
+        if ($maxPercentageKey === false || !isset($labels[$maxPercentageKey])) {
+            throw new \Exception('No se pudo encontrar la etiqueta correspondiente al valor máximo.');
+        }
+
+        // Obtener la etiqueta correspondiente al valor máximo
+        $maxLabel = $labels[$maxPercentageKey];
+
+        // Agrega los conteos por tipo de incidencia
+        $countsByType = $incidencias->groupBy(function ($item) {
+            return \Carbon\Carbon::parse($item->fechaIncidencia)->translatedFormat('F');
+        })->map(function ($group) {
+            return [
+                'retraso' => $group->where('tipo', 'Retraso')->count(),
+                'perdida' => $group->where('tipo', 'Perdida')->count(),
+                'danio' => $group->where('tipo', 'Dañada')->count(),
+            ];
+        });
+
+
         // Renderizar la vista con la gráfica
-        //$pdf = Pdf::loadView('sistema.reporteIncidencia', compact('chartData', 'incidencias'));
+        $pdf = Pdf::loadView('sistema.reporteIncidencia', compact('chartData', 'incidencias', 'maxLabel', 'countsByType'));
 
-        //return $pdf->stream('reporte_incidencias.pdf');
+        return $pdf->stream('reporte_incidencias.pdf');
 
-        return view('sistema.reporteIncidencia', compact('chartData', 'incidencias'));
+        //return view('sistema.reporteIncidencia', compact('chartData', 'incidencias', 'maxLabel', 'countsByType'));
     }
 }

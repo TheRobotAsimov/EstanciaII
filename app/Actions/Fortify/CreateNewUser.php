@@ -46,6 +46,8 @@ class CreateNewUser implements CreatesNewUsers
             'estado' => 'Activo',
         ]);
 
+        $user->givePermissionTo('cliente');
+
         return $user;
     }
 }

@@ -14,10 +14,20 @@ class MovimientoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $movimientos = Movimiento::all();
+        $query = Movimiento::query();
+
+        // Filtrar por rango de fechas
+        if ($request->has(['start', 'end'])) {
+            $start = $request->get('start');
+            $end = $request->get('end');
+            $query->whereBetween('fecha', [$start, $end]);
+        }
+
+        $movimientos = $query->get();
+
         $tipos = cTipo::all();
         $subtipos = cSubTipo::all();
         $empleados = Empleado::all();
@@ -108,12 +118,70 @@ class MovimientoController extends Controller
         return back()->with('success', 'Movimiento eliminado correctamente');
     }
 
-    public function reporte()
+    public function reporte(Request $request)
     {
-        $movimientos = Movimiento::all();
+        // Filtrar movimientos por tipo
+        $ingresos = Movimiento::whereHas('subtipo.tipo', function ($query) {
+            $query->where('nombre', 'Ingreso');
+        })->get();
 
-        $pdf = Pdf::loadView('sistema.reporteMovimientos', compact('movimientos'));
+        $egresos = Movimiento::whereHas('subtipo.tipo', function ($query) {
+            $query->where('nombre', 'Egreso');
+        })->get();
+
+        // Obtener todos los subtipos únicos para las columnas dinámicas
+        $subtiposIngresos = cSubTipo::whereHas('tipo', function ($query) {
+            $query->where('nombre', 'Ingreso');
+        })->pluck('nombre', 'id');
+
+        $subtiposEgresos = cSubTipo::whereHas('tipo', function ($query) {
+            $query->where('nombre', 'Egreso');
+        })->pluck('nombre', 'id');
+
+        // Agrupar datos por mes
+        $ingresosData = $ingresos->groupBy(function ($item) {
+            return \Carbon\Carbon::parse($item->fecha)->translatedFormat('F');
+        })->map(function ($group) use ($subtiposIngresos) {
+            return [
+                'monto_total' => $group->sum('monto'),
+                'cantidad' => $group->count(),
+                'subtipos' => $group->groupBy('id_c_sub_tipo')->mapWithKeys(function ($items, $id) use ($subtiposIngresos) {
+                    return [$subtiposIngresos[$id] ?? 'Otro' => $items->count()];
+                }),
+            ];
+        });
+
+        $egresosData = $egresos->groupBy(function ($item) {
+            return \Carbon\Carbon::parse($item->fecha)->translatedFormat('F');
+        })->map(function ($group) use ($subtiposEgresos) {
+            return [
+                'monto_total' => $group->sum('monto'),
+                'cantidad' => $group->count(),
+                'subtipos' => $group->groupBy('id_c_sub_tipo')->mapWithKeys(function ($items, $id) use ($subtiposEgresos) {
+                    return [$subtiposEgresos[$id] ?? 'Otro' => $items->count()];
+                }),
+            ];
+        });
+
+        // Calcular totales generales
+        $totalesIngresos = [
+            'monto_total' => $ingresosData->sum('monto_total'),
+            'subtipos' => $subtiposIngresos->mapWithKeys(function ($nombre, $id) use ($ingresos) {
+                return [$nombre => $ingresos->where('id_c_sub_tipo', $id)->count()];
+            }),
+        ];
+
+        $totalesEgresos = [
+            'monto_total' => $egresosData->sum('monto_total'),
+            'subtipos' => $subtiposEgresos->mapWithKeys(function ($nombre, $id) use ($egresos) {
+                return [$nombre => $egresos->where('id_c_sub_tipo', $id)->count()];
+            }),
+        ];
+
+        $pdf = PDF::loadView('sistema.reporteMovimientos', compact('ingresosData', 'egresosData', 'subtiposIngresos', 'subtiposEgresos', 'totalesIngresos', 'totalesEgresos'));
 
         return $pdf->stream('reporte_movimientos.pdf');
+
+        //return view('sistema.reporteMovimientos', compact('ingresosData', 'egresosData', 'subtiposIngresos', 'subtiposEgresos', 'totalesIngresos', 'totalesEgresos'));
     }
 }

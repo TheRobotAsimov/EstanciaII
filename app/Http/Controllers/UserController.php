@@ -63,6 +63,8 @@ class UserController extends Controller
             'puesto' => $validatedData['puesto'],
         ]);
 
+        $user->givePermissionTo('empleado');
+
         // Redireccionar o responder
         return redirect()->route('users.index')->with('mensaje', 'Usuario actualizado correctamente');
     }

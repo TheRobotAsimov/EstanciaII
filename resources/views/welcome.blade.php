@@ -79,7 +79,7 @@
             <div class="links">
                 <a href="https://ziyego.mx/como-funciona">Sobre ZIYEGÓ</a>
                 <a href="https://laravel.com/docs">Documentación de Laravel</a>
-                <a href="https://github.com/laravel/laravel">Código Fuente</a>
+                <a href="https://github.com/TheRobotAsimov/EstanciaII">Repositorio GitHub</a>
             </div>
         </div>
     </div>

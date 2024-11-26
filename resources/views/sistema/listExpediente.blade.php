@@ -20,8 +20,17 @@
                 'Cliente',
                 'Categoria',
                 'Valor',
-                ['label' => 'Acciones', 'no-export' => true, 'width' => 20],
             ];
+
+            @endphp
+
+            @can('admin')
+                @php
+                $heads[] = ['label' => 'Acciones', 'no-export' => true, 'width' => 20];
+                @endphp
+            @endcan
+
+            @php
 
             $btnDelete = '<button type="submit" class="mx-1 shadow btn btn-xs btn-default text-danger" title="Delete">
                             <i class="fa fa-lg fa-fw fa-trash"></i>
@@ -43,17 +52,21 @@
                         <td>{{ $expediente->cliente->usuario->nombre }}</td>
                         <td>{{ $expediente->categoria->nombre }}</td>
                         <td>{{ $expediente->valor }}</td>
-                        <td>
-                            <a href="{{route('expedientes.edit', $expediente)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
-                                <i class="fa fa-lg fa-fw fa-pen"></i>
-                            </a>
-                            <form style="display: inline" action="{{route('expedientes.destroy', $expediente)}}" method="post" class="formEliminar">
-                                @csrf
-                                @method('delete')
-                                {!! $btnDelete !!}
-                            </form>
-                            {!! $btnDetails !!}
-                        </td>
+                        @can('admin')
+                            <td>
+                                <a href="{{route('expedientes.edit', $expediente)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
+                                    <i class="fa fa-lg fa-fw fa-pen"></i>
+                                </a>
+                                <form style="display: inline" action="{{route('expedientes.destroy', $expediente)}}" method="post" class="formEliminar">
+                                    @csrf
+                                    @method('delete')
+                                    {!! $btnDelete !!}
+                                </form>
+                                <button type="button" class="mx-1 shadow btn btn-xs btn-default text-teal btnDetails" data-toggle="modal" data-target="#notasModal" data-notas="{{ $expediente->notas }}">
+                                    <i class="fa fa-lg fa-fw fa-eye"></i>
+                                </button>
+                            </td>
+                        @endcan
                     </tr>
                 @endforeach
             </x-adminlte-datatable>
@@ -94,6 +107,23 @@
             <x-adminlte-button  type="submit" label="Agregar" theme="primary" icon="fas fa-plus" class="float-right"/>
         </form>
     </x-adminlte-modal>
+
+    <!-- Modal Details -->
+    <div class="modal fade" id="notasModal" tabindex="-1" role="dialog" aria-labelledby="notasModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notasModalLabel">Notas del Movimiento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalNotas"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -126,7 +156,12 @@
                 });
             });
         })
-    </script>
 
-    
+        $(document).ready(function() {
+            $('.btnDetails').on('click', function() {
+                var notas = $(this).data('notas');
+                $('#modalNotas').text(notas);
+            });
+        });
+    </script>
 @stop

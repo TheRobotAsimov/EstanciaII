@@ -28,4 +28,9 @@ class Cliente extends Model
     {
         return $this->hasMany(Expediente::class, 'id_cliente');
     }
+
+    public function envios()
+    {
+        return $this->hasMany(Envio::class, 'id_cliente');
+    }
 }

@@ -16,10 +16,21 @@
                 'ID',
                 'Nombre',
                 'Apellidos',
+                'Fecha de Nacimiento',
                 'Telefono',
+                'Email',
                 'Tipo',
-                ['label' => 'Acciones', 'no-export' => true, 'width' => 20],
             ];
+            @endphp
+
+            @can('admin')
+                @php
+                $heads[] = ['label' => 'Acciones', 'no-export' => true, 'width' => 20];
+                @endphp
+
+            @endcan
+
+            @php
 
             $btnDelete = '<button type="submit" class="mx-1 shadow btn btn-xs btn-default text-danger" title="Delete">
                             <i class="fa fa-lg fa-fw fa-trash"></i>
@@ -40,7 +51,9 @@
                         <td>{{ $usuario->id }}</td>
                         <td>{{ $usuario->nombre }}</td>
                         <td>{{ $usuario->apellidos }}</td>
+                        <td>{{ $usuario->fecnac }}</td>
                         <td>{{ $usuario->telefono }}</td>
+                        <td>{{ $usuario->email }}</td>
                         <td>
                             @if ($usuario->empleado)
                                 Empleado
@@ -50,17 +63,18 @@
                                 ---
                             @endif
                         </td>
-                        <td>
-                            <a href="{{route('users.edit', $usuario)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
-                                <i class="fa fa-lg fa-fw fa-pen"></i>
-                            </a>
-                            <form style="display: inline" action="{{route('users.destroy', $usuario)}}" method="post" class="formEliminar">
-                                @csrf
-                                @method('delete')
-                                {!! $btnDelete !!}
-                            </form>
-                            {!! $btnDetails !!}
-                        </td>
+                        @can('admin')
+                            <td>
+                                <a href="{{route('users.edit', $usuario)}}" class="mx-1 shadow btn btn-xs btn-default text-primary" title="Edit">
+                                    <i class="fa fa-lg fa-fw fa-pen"></i>
+                                </a>
+                                <form style="display: inline" action="{{route('users.destroy', $usuario)}}" method="post" class="formEliminar">
+                                    @csrf
+                                    @method('delete')
+                                    {!! $btnDelete !!}
+                                </form>
+                            </td>
+                        @endcan
                     </tr>
                 @endforeach
             </x-adminlte-datatable>
